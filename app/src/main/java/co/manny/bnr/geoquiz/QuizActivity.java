@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 public class QuizActivity extends AppCompatActivity {
 
-    private Button mTrueButton, mFalseButton, mNextButton;
+    private Button mTrueButton, mFalseButton, mNextButton, mPreviousButton;
     private TextView mQuestionTextView;
 
     private Question[] mQuestionBank = new Question[] {
@@ -39,6 +39,19 @@ public class QuizActivity extends AppCompatActivity {
             }
         });
 
+        mPreviousButton = (Button) findViewById(R.id.previous_button);
+        mPreviousButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View v) {
+                if (mCurrentIndex == 0) {
+                    mCurrentIndex = mQuestionBank.length - 1;
+                } else {
+                    mCurrentIndex--;
+                }
+                updateQuestion();
+            }
+        });
+
         mTrueButton = (Button) findViewById(R.id.true_button);
         mTrueButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,8 +71,7 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void updateQuestion() {
-        int question = mQuestionBank[mCurrentIndex].getTextResId();
-        mQuestionTextView.setText(question);
+        mQuestionTextView.setText(mQuestionBank[mCurrentIndex].getTextResId());
     }
 
     private void checkAnswer(boolean userPressedTrue) {
