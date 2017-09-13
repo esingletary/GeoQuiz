@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +26,7 @@ public class QuizActivity extends AppCompatActivity {
     };
 
     private int mCurrentIndex = 0;
+    private int totalScore = mQuestionBank.length;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,13 +111,17 @@ public class QuizActivity extends AppCompatActivity {
     private void checkAnswer(boolean userPressedTrue) {
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
 
-        int messageResId = 0;
+        if (mCurrentIndex == mQuestionBank.length - 1) {
+            double score = (double) totalScore / (double) mQuestionBank.length;
+            Toast.makeText(this, "Your total score is " + (int) (score * 100) + "%", Toast.LENGTH_SHORT).show();
+            totalScore = mQuestionBank.length;
 
-        if (userPressedTrue == answerIsTrue) {
-            messageResId = R.string.correct_toast;
+        } else if (userPressedTrue == answerIsTrue) {
+            Toast.makeText(this, R.string.correct_toast, Toast.LENGTH_SHORT).show();
+
         } else {
-            messageResId = R.string.incorrect_toast;
+            Toast.makeText(this, R.string.incorrect_toast, Toast.LENGTH_SHORT).show();
+            totalScore--;
         }
-        Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
     }
 }
