@@ -53,6 +53,7 @@ public class QuizActivity extends AppCompatActivity {
         mTrueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v) {
+                areButtonsVisible(false);
                 checkAnswer(true);
             }
         });
@@ -61,6 +62,7 @@ public class QuizActivity extends AppCompatActivity {
         mFalseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v) {
+                areButtonsVisible(false);
                 checkAnswer(false);
             }
         });
@@ -106,6 +108,20 @@ public class QuizActivity extends AppCompatActivity {
 
     private void updateQuestion() {
         mQuestionTextView.setText(mQuestionBank[mCurrentIndex].getTextResId());
+        areButtonsVisible(true);
+
+    }
+
+    private void areButtonsVisible(boolean visibility) {
+        View a = findViewById(R.id.true_button);
+        View b = findViewById(R.id.false_button);
+        if (visibility) {
+            a.setVisibility(View.VISIBLE);
+            b.setVisibility(View.VISIBLE);
+        } else {
+            a.setVisibility(View.GONE);
+            b.setVisibility(View.GONE);
+        }
     }
 
     private void checkAnswer(boolean userPressedTrue) {
