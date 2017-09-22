@@ -17,7 +17,7 @@ public class CheatActivity extends AppCompatActivity {
     private static final String EXTRA_ANSWER_IS_TRUE="co.manny.bnr.geoquiz.answer_is_true";
     private static final String EXTRA_ANSWER_SHOWN = "co.manny.bnr.geoquiz.answer_shown";
 
-    private TextView mAnswerTextView, mAPIVersionTextView;
+    private TextView mAnswerTextView, mAPIVersionTextView, mRemainingCheats;
     private Button mShowAnswerButton;
 
     public static Intent newIntent(Context packageContext, boolean answerIsTrue) {
@@ -40,6 +40,7 @@ public class CheatActivity extends AppCompatActivity {
 
         mAnswerTextView = (TextView) findViewById(R.id.answer_text_view);
         mAPIVersionTextView = (TextView) findViewById(R.id.api_version_text_view);
+        mRemainingCheats = (TextView) findViewById(R.id.remaining_cheats_text_view);
 
         mAPIVersionTextView.setText("API Level "+Build.VERSION.SDK_INT);
 

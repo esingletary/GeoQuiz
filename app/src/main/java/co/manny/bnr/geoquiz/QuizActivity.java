@@ -14,12 +14,15 @@ public class QuizActivity extends AppCompatActivity {
 
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "index";
+    private static final String KEY_REMCHEATS = "remainingCheats";
+
     private static final int REQUEST_CODE_CHEAT = 0;
 
     private boolean mIsCheater;
+    private int mRemainingCheats = 3;
 
     private Button mTrueButton, mFalseButton, mNextButton, mCheatButton;
-    private TextView mQuestionTextView;
+    private TextView mQuestionTextView, mRemainingCheatsTextView;
 
     private Question[] mQuestionBank = new Question[] {
             new Question(R.string.question_australia, true),
@@ -40,15 +43,24 @@ public class QuizActivity extends AppCompatActivity {
 
         if (savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
+            mRemainingCheats = savedInstanceState.getInt(KEY_REMCHEATS, 3);
         }
 
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
+
+        mRemainingCheatsTextView = (TextView) findViewById(R.id.remaining_cheats_text_view);
 
         mNextButton = (Button) findViewById(R.id.next_button);
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v) {
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
+                if (mIsCheater && mRemainingCheats > 0) {
+                    mRemainingCheats--;
+                }
+                if (mRemainingCheats == 0) {
+                    mCheatButton.setEnabled(false);
+                }
                 mIsCheater = false;
                 updateQuestion();
             }
@@ -97,6 +109,7 @@ public class QuizActivity extends AppCompatActivity {
         super.onSaveInstanceState(savedInstanceState);
         Log.i(TAG, "onSaveInstanceState");
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+        savedInstanceState.putInt(KEY_REMCHEATS, mRemainingCheats);
     }
 
     @Override
@@ -131,6 +144,7 @@ public class QuizActivity extends AppCompatActivity {
 
     private void updateQuestion() {
         mQuestionTextView.setText(mQuestionBank[mCurrentIndex].getTextResId());
+        mRemainingCheatsTextView.setText("Remaining Cheats: "+mRemainingCheats);
     }
 
     private void checkAnswer(boolean userPressedTrue) {
