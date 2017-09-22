@@ -23,12 +23,12 @@ public class QuizActivity extends AppCompatActivity {
     private TextView mQuestionTextView;
 
     private Question[] mQuestionBank = new Question[] {
-            new Question(R.string.question_australia, true),
-            new Question(R.string.question_oceans, true),
-            new Question(R.string.question_mideast, false),
-            new Question(R.string.question_africa, false),
-            new Question(R.string.question_americas, true),
-            new Question(R.string.question_asia, true),
+            new Question(R.string.question_australia, true, false),
+            new Question(R.string.question_oceans, true, false),
+            new Question(R.string.question_mideast, false, false),
+            new Question(R.string.question_africa, false, false),
+            new Question(R.string.question_americas, true, false),
+            new Question(R.string.question_asia, true, false),
     };
 
     private int mCurrentIndex = 0;
@@ -50,9 +50,12 @@ public class QuizActivity extends AppCompatActivity {
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v) {
-                mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                 mIsCheater = false;
+                mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                 updateQuestion();
+                if (mQuestionBank[mCurrentIndex].isAnswerShown()) {
+                    mIsCheater = true;
+                }
             }
         });
 
@@ -143,6 +146,7 @@ public class QuizActivity extends AppCompatActivity {
 
         if (mIsCheater) {
             messageResId = R.string.judgement_toast;
+            mQuestionBank[mCurrentIndex].setAnswerShown(true);
 
         } else {
             if (userPressedTrue == answerIsTrue) {
