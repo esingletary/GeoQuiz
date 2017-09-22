@@ -12,6 +12,9 @@ public class CheatActivity extends AppCompatActivity {
 
     private static final String EXTRA_ANSWER_IS_TRUE="co.manny.bnr.geoquiz.answer_is_true";
     private static final String EXTRA_ANSWER_SHOWN = "co.manny.bnr.geoquiz.answer_shown";
+    private static final String KEY_ISANSWERSHOWN = "isAnswerShown";
+
+    private boolean isAnswerShown;
 
     private TextView mAnswerTextView;
     private Button mShowAnswerButton;
@@ -32,6 +35,10 @@ public class CheatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cheat);
 
+        if (savedInstanceState != null) {
+            isAnswerShown = savedInstanceState.getBoolean(KEY_ISANSWERSHOWN, false);
+        }
+
         mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
 
         mAnswerTextView = (TextView) findViewById(R.id.answer_text_view);
@@ -45,9 +52,28 @@ public class CheatActivity extends AppCompatActivity {
                 } else {
                     mAnswerTextView.setText(R.string.false_button);
                 }
-                setAnswerShownResult(true);
+                isAnswerShown = true;
+                setAnswerShownResult(isAnswerShown);
             }
         });
+        updateResult(mAnswerIsTrue);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putBoolean(KEY_ISANSWERSHOWN, isAnswerShown);
+    }
+
+    private void updateResult(boolean isTrue) {
+        if (isAnswerShown) {
+            if (isTrue) {
+                mAnswerTextView.setText(R.string.true_button);
+            } else {
+                mAnswerTextView.setText(R.string.false_button);
+            }
+            setAnswerShownResult(isAnswerShown);
+        }
     }
 
     private void setAnswerShownResult(boolean isAnswerShown) {
